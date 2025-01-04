@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -35,11 +35,11 @@ public class DeveloperProfile {
 
     @Type(StringArrayType.class)
     @Column(name = "skills", columnDefinition = "text[]")
-    private String[] stringArray;
+    private String[] skills;
 
     @Column(name = "location")
     private String location;
 
     @Column(name = "lastActivityDate")
-    private LocalDateTime lastActivityDate;
+    private LocalDate lastActivityDate;
 }

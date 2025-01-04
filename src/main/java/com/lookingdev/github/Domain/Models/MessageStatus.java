@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
 public class MessageStatus {
     private QueueAction action;
     private String status;
-
 }

@@ -3,8 +3,7 @@ package com.lookingdev.github.Domain.Models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -18,6 +17,5 @@ public class DeveloperDTOModel {
     private Integer reputation;
     private List<String> skills;
     private String location;
-    private LocalDateTime lastActivityDate;
-
+    private LocalDate lastActivityDate;
 }
