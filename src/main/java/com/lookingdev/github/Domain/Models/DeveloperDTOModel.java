@@ -1,5 +1,6 @@
 package com.lookingdev.github.Domain.Models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,7 @@ public class DeveloperDTOModel {
     private Integer reputation;
     private List<String> skills;
     private String location;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate lastActivityDate;
 }

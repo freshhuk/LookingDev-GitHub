@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +24,8 @@ public class GitHubService {
     @Value("${gitapi.key}")
     private String gitHubToken;
 
-    public List<DeveloperDTOModel> fetchMultipleUsers(int userCount){
-        try{
+    public List<DeveloperDTOModel> fetchMultipleUsers(int userCount) {
+        try {
             GitHub github = GitHub.connectUsingOAuth(gitHubToken); // Connect with gitHub with token
             List<DeveloperDTOModel> userProfiles = new ArrayList<>();
 
@@ -43,7 +44,7 @@ public class GitHubService {
             }
 
             return userProfiles;
-        } catch (Exception ex){
+        } catch (Exception ex) {
             logger.error("Something was wrong, error: " + ex);
             return null;
         }
@@ -52,7 +53,8 @@ public class GitHubService {
 
     private DeveloperDTOModel convertToUserProfile(GHUser ghUser) throws IOException {
 
-        DeveloperDTOModel convertedModel = new DeveloperDTOModel();{
+        DeveloperDTOModel convertedModel = new DeveloperDTOModel();
+        {
             convertedModel.setPlatform("GitHub");
             convertedModel.setUsername(ghUser.getLogin());
             convertedModel.setProfileUrl(ghUser.getHtmlUrl().toString());

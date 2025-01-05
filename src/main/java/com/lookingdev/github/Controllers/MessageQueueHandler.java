@@ -23,7 +23,7 @@ public class MessageQueueHandler {
         if(messageStatus.getAction().equals(QueueAction.INIT_DB)){
             messageService.initDatabase();
         } else if(messageStatus.getAction().equals(QueueAction.GET_GIT_DEV)){
-            messageService.getGitHubUsers();
+            messageService.getGitHubUsers(messageStatus);
         }
     }
 }

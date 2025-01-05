@@ -13,5 +13,4 @@ import java.util.List;
 public class MessageModel {
     private QueueAction action;
     private List<DeveloperDTOModel> developerProfiles;
-    private Integer lastIndexEntity;
 }
