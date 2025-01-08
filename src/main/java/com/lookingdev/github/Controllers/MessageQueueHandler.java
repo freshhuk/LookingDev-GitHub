@@ -20,6 +20,7 @@ public class MessageQueueHandler {
 
     @RabbitListener(queues = "APIStatusQueue")
     public void listenAPIStatus(@Payload MessageStatus messageStatus){
+        System.out.println(messageStatus.toString());
         if(messageStatus.getAction().equals(QueueAction.INIT_DB)){
             messageService.initDatabase();
         } else if(messageStatus.getAction().equals(QueueAction.GET_GIT_DEV)){

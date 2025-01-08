@@ -1,10 +1,7 @@
 package com.lookingdev.github.Services;
 
 import com.lookingdev.github.Domain.Models.DeveloperDTOModel;
-import org.kohsuke.github.GHUser;
-import org.kohsuke.github.GitHub;
-import org.kohsuke.github.PagedIterable;
-import org.kohsuke.github.PagedIterator;
+import org.kohsuke.github.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,7 +42,7 @@ public class GitHubService {
 
             return userProfiles;
         } catch (Exception ex) {
-            logger.error("Something was wrong, error: " + ex);
+            logger.error("Something was wrong, error: {}", String.valueOf(ex));
             return null;
         }
 
@@ -70,10 +67,30 @@ public class GitHubService {
                     ghUser.getLocation() != null ? ghUser.getLocation() : "Unknown"
             );
 
-            convertedModel.setSkills(List.of("Java", "Spring", "Git")); // TODO
+            List<String> skills = fetchUserSkills(ghUser);
+            convertedModel.setSkills(skills);
         }
 
         return convertedModel;
     }
+    private List<String> fetchUserSkills(GHUser ghUser) {
+        List<String> skills = new ArrayList<>();
+        try {
+            //Get lest repository
+            PagedIterable<GHRepository> repositories = ghUser.listRepositories();
+
+            for (GHRepository repo : repositories) {
+                String language = repo.getLanguage();
+                if (language != null && !skills.contains(language)) {
+                    skills.add(language);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Failed to fetch repositories for user: {}. Error: {}", ghUser.getLogin(), e.getMessage());
+        }
+        return skills;
+    }
+
+
 
 }
