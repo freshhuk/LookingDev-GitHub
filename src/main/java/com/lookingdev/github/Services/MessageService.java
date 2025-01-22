@@ -56,7 +56,6 @@ public class MessageService {
         } catch (Exception ex) {
             logger.error("Error with get gitHub users {}", String.valueOf(ex));
         }
-
     }
 
     /**

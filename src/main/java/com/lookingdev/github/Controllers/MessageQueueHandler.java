@@ -20,8 +20,7 @@ public class MessageQueueHandler {
 
     @RabbitListener(queues = "APIStatusQueue")
     public void listenAPIStatus(@Payload MessageStatus messageStatus){
-        System.out.println(messageStatus.toString());
-        if(messageStatus.getAction().equals(QueueAction.INIT_DB)){
+        if(messageStatus.getAction().equals(QueueAction.INIT_DB_GIT)){
             messageService.initDatabase();
         } else if(messageStatus.getAction().equals(QueueAction.GET_GIT_DEV)){
             messageService.getGitHubUsers(messageStatus);
