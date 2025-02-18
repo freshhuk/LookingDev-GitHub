@@ -19,8 +19,6 @@ public class RabbitMQConfig {
     private String queuePassword;
 
 
-
-
     @Bean
     public CachingConnectionFactory connectionFactory(){
         CachingConnectionFactory connection = new CachingConnectionFactory("localhost");

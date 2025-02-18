@@ -38,6 +38,7 @@ public class GitHubService {
                 userProfiles.add(userProfile);
 
                 fetchedUsers++;
+                logger.info("Converted new user");
             }
 
             return userProfiles;

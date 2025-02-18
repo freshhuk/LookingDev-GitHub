@@ -16,6 +16,11 @@ public class MessageService {
     @Value("${queueGitStatus.name}")
     private String queueGitModel;
 
+    @Value("${queueGitStatus.init.name}")
+    private String queueGitInitStatus;
+
+    private String initStatus = "Wait...";
+
     private final ProfileProcessing profileService;
     private final RabbitTemplate rabbitTemplate;
     private static final Logger logger = LoggerFactory.getLogger(MessageService.class);
@@ -28,11 +33,24 @@ public class MessageService {
     }
 
     /**
+     * Method returns initialization status of GitHub microservice
+     *
+     */
+    public void getInitStatus(){
+        MessageStatus messageWithStatus = new MessageStatus();
+        messageWithStatus.setAction(QueueAction.GET_INIT_STATUS_GIT);
+        messageWithStatus.setStatus(initStatus);
+
+        sendStatusInQueue(queueGitInitStatus, messageWithStatus);
+    }
+
+    /**
      * Method for init database with data
      */
     public void initDatabase() {
         try {
             profileService.initUsers();
+            initStatus = "Done";
             logger.info("Users have been initiated");
         } catch (Exception ex) {
             logger.error("Error with init users {}", String.valueOf(ex));
@@ -65,6 +83,16 @@ public class MessageService {
      * @param message   message which be sent in the queue
      */
     private void sendDataInQueue(String queueName, MessageModel message) {
+        rabbitTemplate.convertAndSend(queueName, message);
+    }
+
+    /**
+     * Method for sending status message in queue
+     *
+     * @param queueName queue name
+     * @param message   message which be sent in the queue
+     */
+    private void sendStatusInQueue(String queueName, MessageStatus message) {
         rabbitTemplate.convertAndSend(queueName, message);
     }
 }

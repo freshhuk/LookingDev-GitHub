@@ -38,8 +38,9 @@ public class ProfileProcessing {
         List<DeveloperDTOModel> users = gitHubService.fetchMultipleUsers(USER_COUNT_IN_DB);
         for (DeveloperDTOModel user : users) {
             repository.add(user);
+            logger.info("User was added in db");
         }
-        logger.info("Users was added in db");
+        logger.info("ALL Users was added in db");
     }
 
     public List<DeveloperDTOModel> getDevelopersDTO(int lastIndex) {
