@@ -5,7 +5,7 @@ FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 
 # Copy JAR-file in container
-COPY target/LookingDev-API-0.0.1-SNAPSHOT.jar app.jar
+COPY target/LookingDev-GitHub-0.0.1-SNAPSHOT.jar /app.jar
 
 # Port
 EXPOSE 8081
