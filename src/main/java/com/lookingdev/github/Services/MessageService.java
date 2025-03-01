@@ -56,9 +56,26 @@ public class MessageService {
             logger.error("Error with init users {}", String.valueOf(ex));
         }
     }
+    //TODO
+    public void getAllUsers(MessageStatus messageStatus){
+        try{
+            if (messageStatus.getAction().equals(QueueAction.GET_ALL)) {
+                //Parsing message for get last entity index
+                int lastIndex = (Integer.parseInt(messageStatus.getStatus())) * 10;
+
+                MessageModel messageWithData = new MessageModel();
+                messageWithData.setAction(QueueAction.GET_GIT_DEV);
+                messageWithData.setDeveloperProfiles(profileService.getDevelopersDTO(lastIndex));
+
+                sendDataInQueue(queueGitModel, messageWithData);
+                logger.info("User was sent in queue");
+            }
+        } catch (Exception ex) {
+            logger.error("Error with get gitHub users {}", String.valueOf(ex));
+        }
+    }
 
     public void getGitHubUsers(MessageStatus messageStatus) {
-
         try {
             if (messageStatus.getAction().equals(QueueAction.GET_GIT_DEV)) {
                 //Parsing message for get last entity index

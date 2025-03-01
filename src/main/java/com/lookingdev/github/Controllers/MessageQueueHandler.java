@@ -26,6 +26,8 @@ public class MessageQueueHandler {
             messageService.getGitHubUsers(messageStatus);
         } else if(messageStatus.getAction().equals(QueueAction.GET_INIT_STATUS_GIT)){
             messageService.getInitStatus();
+        } else if(messageStatus.getAction().equals(QueueAction.GET_ALL)){
+            messageService.getAllUsers(messageStatus);
         }
     }
 }
