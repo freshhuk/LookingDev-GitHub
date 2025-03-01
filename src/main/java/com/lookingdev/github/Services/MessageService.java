@@ -48,14 +48,17 @@ public class MessageService {
      * Method for init database with data
      */
     public void initDatabase() {
-        try {
-            profileService.initUsers();
-            initStatus = "Done";
+        initStatus = "In Progress"; // Set status before start
+        profileService.initUsers().thenRun(() -> {
+            initStatus = "Done"; // Change status after finish
             logger.info("Users have been initiated");
-        } catch (Exception ex) {
-            logger.error("Error with init users {}", String.valueOf(ex));
-        }
+            }).exceptionally(ex -> {
+                    initStatus = "Failed"; // If we get error, then set failed status
+                    logger.error("Error with init users {}", ex.getMessage());
+                    return null;
+                });
     }
+
     //TODO
     public void getAllUsers(MessageStatus messageStatus){
         try{

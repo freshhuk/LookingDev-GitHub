@@ -6,9 +6,11 @@ import com.lookingdev.github.Repositories.DeveloperRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,13 +36,20 @@ public class ProfileProcessing {
     /**
      * Method gets users from gitHub and sets they in database
      */
-    public void initUsers() {
-        List<DeveloperDTOModel> users = gitHubService.fetchMultipleUsers(USER_COUNT_IN_DB);
-        for (DeveloperDTOModel user : users) {
-            repository.add(user);
-            logger.info("User was added in db");
-        }
-        logger.info("ALL Users was added in db");
+    @Async
+    public CompletableFuture<Void> initUsers() {
+        return gitHubService.fetchMultipleUsers(USER_COUNT_IN_DB)
+                .thenAccept(users -> {
+                    for (DeveloperDTOModel user : users) {
+                        repository.add(user);
+                        logger.info("User was added in db");
+                    }
+                    logger.info("ALL Users were added in db");
+                })
+                .exceptionally(ex -> {
+                    logger.error("Error fetching users: {}", ex.getMessage());
+                    return null;
+                });
     }
 
     public List<DeveloperDTOModel> getDevelopersDTO(int lastIndex) {

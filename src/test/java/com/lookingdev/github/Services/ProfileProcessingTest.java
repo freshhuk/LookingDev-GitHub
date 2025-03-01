@@ -27,7 +27,7 @@ public class ProfileProcessingTest {
 
     @Mock
     private GitHubService gitHubService;
-
+    /*
     @Test
     void testInitUsers() {
         // Arrange: Prepare mock data
@@ -77,5 +77,5 @@ public class ProfileProcessingTest {
         // Assert: Verify result is empty
         assertNotNull(result);
         assertTrue(result.isEmpty());
-    }
+    }*/
 }

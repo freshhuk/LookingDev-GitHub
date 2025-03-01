@@ -5,11 +5,13 @@ import org.kohsuke.github.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 
 @Service
@@ -21,7 +23,8 @@ public class GitHubService {
     @Value("${gitapi.key}")
     private String gitHubToken;
 
-    public List<DeveloperDTOModel> fetchMultipleUsers(int userCount) {
+    @Async
+    public CompletableFuture<List<DeveloperDTOModel>> fetchMultipleUsers(int userCount) {
         try {
             GitHub github = GitHub.connectUsingOAuth(gitHubToken); // Connect with gitHub with token
             List<DeveloperDTOModel> userProfiles = new ArrayList<>();
@@ -41,10 +44,10 @@ public class GitHubService {
                 logger.info("Converted new user");
             }
 
-            return userProfiles;
+            return CompletableFuture.completedFuture(userProfiles);
         } catch (Exception ex) {
-            logger.error("Something was wrong, error: {}", String.valueOf(ex));
-            return null;
+            logger.error("Something went wrong, error: {}", ex.toString());
+            return CompletableFuture.failedFuture(ex);
         }
 
     }
