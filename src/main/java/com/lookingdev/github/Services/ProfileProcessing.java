@@ -52,14 +52,27 @@ public class ProfileProcessing {
                 });
     }
 
+    /**
+     * Method for getting users with default users limit
+     * @param lastIndex last index entity which will be return
+     * @return list with users
+     */
     public List<DeveloperDTOModel> getDevelopersDTO(int lastIndex) {
-        List<DeveloperProfile> profiles = repository.getDevelopers(LIMIT_USERS, lastIndex);
+        return getDevelopersDTO(LIMIT_USERS, lastIndex);
+    }
+
+    /**
+     * Method for getting users with custom users limit
+     * @param lastIndex last index entity which will be return
+     * @return list with users
+     */
+    public List<DeveloperDTOModel> getDevelopersDTO(int limitUsers, int lastIndex) {
+        List<DeveloperProfile> profiles = repository.getDevelopers(limitUsers, lastIndex);
         if (profiles == null || profiles.isEmpty()) {
-            return List.of(); // if data null or empty
+            return List.of();
         }
         return convertToDTO(profiles);
     }
-
 
     private List<DeveloperDTOModel> convertToDTO(List<DeveloperProfile> developerProfiles) {
         return developerProfiles.stream()

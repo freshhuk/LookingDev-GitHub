@@ -24,7 +24,7 @@ public class MessageService {
     private final ProfileProcessing profileService;
     private final RabbitTemplate rabbitTemplate;
     private static final Logger logger = LoggerFactory.getLogger(MessageService.class);
-
+    private static final int LIMIT_USERS = 5;
 
     @Autowired
     public MessageService(ProfileProcessing profileService, RabbitTemplate rabbitTemplate) {
@@ -68,8 +68,9 @@ public class MessageService {
 
                 MessageModel messageWithData = new MessageModel();
                 messageWithData.setAction(QueueAction.GET_GIT_DEV);
-                messageWithData.setDeveloperProfiles(profileService.getDevelopersDTO(lastIndex));
+                messageWithData.setDeveloperProfiles(profileService.getDevelopersDTO(LIMIT_USERS, lastIndex));
 
+                //create new queue and send here message
                 sendDataInQueue(queueGitModel, messageWithData);
                 logger.info("User was sent in queue");
             }
