@@ -72,26 +72,37 @@ public class MessageService {
         });
     }
 
-    //TODO
     public void getAllUsers(MessageStatus messageStatus) {
         try {
             if (messageStatus.getAction().equals(QueueAction.GET_ALL)) {
 
+                //Parsing message for get last entity index
+                int lastIndex = (Integer.parseInt(messageStatus.getStatus())) * 5;
+
+                List<DeveloperDTOModel> gitHubDevs = profileService.getDevelopersDTO(LIMIT_USERS, lastIndex);
+
                 latch = new CountDownLatch(1);
 
-                requestStackUsers(messageStatus);
+                requestStackUsers(lastIndex);
 
                 boolean received = latch.await(5, TimeUnit.SECONDS); // wait 5 seconds until we get the status
+
+                devModels.addAll(gitHubDevs); //Marge Stack users with gitHub
 
                 if (!received) {
                     logger.warn("Status not received in time");
                 }
-                //TODO доделать: сделать получение 5 юзеров с гит хаба, обьеденить их с получеными юзерами и отправить 10 юзиров в апи
 
-                logger.info("User was sent in queue");
+                MessageModel messageWithData = new MessageModel();
+
+                messageWithData.setAction(QueueAction.GET_ALL);
+                messageWithData.setDeveloperProfiles(devModels);
+
+                sendDataInQueue(queueGitModel, messageWithData);
+                logger.info("User was sent in API");
             }
         } catch (Exception ex) {
-            logger.error("Error with get gitHub users {}", String.valueOf(ex));
+            logger.error("Error with get All users users {}", String.valueOf(ex));
         }
     }
 
@@ -121,16 +132,11 @@ public class MessageService {
     /**
      * Method send request to Stack Overflow microservice for get those users
      *
-     * @param messageStatus received status from API
+     * @param lastIndex received page num from API
      */
-    private void requestStackUsers(MessageStatus messageStatus) {
-        //Parsing message for get last entity index
-        int lastIndex = (Integer.parseInt(messageStatus.getStatus())) * 5;
-
+    private void requestStackUsers(int lastIndex) {
         MessageStatus message = new MessageStatus(QueueAction.GET_STACK_USER, lastIndex + "");
-
         sendStatusInQueue(queueGitSagaChain, message);
-
     }
 
 
